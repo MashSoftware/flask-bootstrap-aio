@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+    <div class="col">
+        {{ super() }}
+        <h1>{{title}}</h1>
+        <hr>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-3">
+        <div class="d-grid gap-2 mb-3">
+            <a class="btn btn-primary btn-lg" href="{{ url_for('thing.create') }}"><i class="bi bi-plus-lg"></i> New thing</a>
+        </div>
+        <div class="card mb-3">
+            <div class="card-header">Filters</div>            
+            <div class="card-body">
+                <form action="" method="get" novalidate>
+                    <div class="mb-3">
+                        {{ form.display.label(class="form-label") }}
+                        {% for subfield in form.display %}
+                            <div class="form-check">
+                                {{ subfield(class="form-check-input", type="radio") }}
+                                {{ subfield.label(class="form-check-label") }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.sort.label(class="form-label") }}
+                        {{ form.sort(class="form-select mb-2") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.name.label(class="form-label") }}
+                        {{ form.name(class="form-control mb-2", type="text") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.colour.label(class="form-label") }}
+                        {% for subfield in form.colour %}
+                            <div class="form-check">
+                                {{ subfield(class="form-check-input", type="radio") }}
+                                {{ subfield.label(class="form-check-label") }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-secondary" type="submit"><i class="bi bi-filter"></i> Apply filters</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        {% if things %}
+        <p class="mb-3">
+            Showing <strong>{{ things|length }}</strong> of <strong>{{ total }}</strong> things
+            <a class="btn btn-secondary float-end" href="{{ url_for('thing.download') }}"><i class="bi bi-download"></i> Download</a>
+        </p>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Colour</th>
+                        <th scope="col">Owner</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for thing in things %}
+                        <tr>
+                            <th scope="row"><a href="{{ url_for('thing.view', id=thing.id) }}">{{ thing.name }}</a></th>
+                            <td>{{ thing.colour | title }}</td>
+                            <td><a href="{{ url_for('user.view', id=thing.user_id)}}">{{ thing.user.name }}</a></td>
+                            <td>
+                                {% if thing in current_user.things %}
+                                <a href="{{ url_for('thing.edit', id=thing.id) }}"><i class="bi bi-pencil-square"></i> Edit</a><br>
+                                <a href="{{ url_for('thing.delete', id=thing.id) }}" class="link-danger"><i class="bi bi-trash"></i> Delete</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p>Showing <strong>0</strong> of <strong>{{ total }}</strong> things</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
