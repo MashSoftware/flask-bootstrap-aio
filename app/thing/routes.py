@@ -7,10 +7,10 @@ from flask import Response, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 from werkzeug.exceptions import Forbidden
 
-from app import csrf, db, limiter
+from app import db, limiter
 from app.models import Thing
 from app.thing import bp
-from app.thing.forms import ThingFilterForm, ThingForm
+from app.thing.forms import ThingDeleteForm, ThingFilterForm, ThingForm
 
 
 @bp.route("/", methods=["GET", "POST"])
@@ -119,17 +119,19 @@ def edit(id):
 @bp.route("/<uuid:id>/delete", methods=["GET", "POST"])
 @login_required
 @limiter.limit("2 per second", key_func=lambda: current_user.id)
-@csrf.exempt
 def delete(id):
     """Delete a Thing with a specific ID."""
     thing = Thing.query.get_or_404(str(id))
     if thing not in current_user.things:
         raise Forbidden()
 
+    form = ThingDeleteForm()
+
     if request.method == "GET":
         return render_template(
             "delete_thing.html",
             title=f"Delete {thing.name}",
+            form=form,
             thing=thing,
         )
     elif request.method == "POST":

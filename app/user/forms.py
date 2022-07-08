@@ -100,3 +100,7 @@ class UserForm(FlaskForm):
             user = User.query.filter_by(email_address=email_address.data).first()
             if user is not None:
                 raise ValidationError("Email address is already in use")
+
+
+class UserDeleteForm(FlaskForm):
+    pass

@@ -64,3 +64,7 @@ class ThingFilterForm(FlaskForm):
         ],
         default="",
     )
+
+
+class ThingDeleteForm(FlaskForm):
+    pass

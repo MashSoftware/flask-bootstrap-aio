@@ -6,10 +6,10 @@ from flask_login import current_user, fresh_login_required, login_required, logi
 from werkzeug.exceptions import Forbidden
 from werkzeug.urls import url_parse
 
-from app import csrf, db, limiter
+from app import db, limiter
 from app.models import User
 from app.user import bp
-from app.user.forms import LoginForm, SignupForm, UserForm
+from app.user.forms import LoginForm, SignupForm, UserDeleteForm, UserForm
 
 
 @bp.route("/signup", methods=["GET", "POST"])
@@ -51,7 +51,7 @@ def login():
         current_app.logger.info(f"User {current_user.id} logged in")
         next_page = request.args.get("next")
         if not next_page or url_parse(next_page).netloc != "":
-            next_page = url_for("main.index")
+            next_page = url_for("thing.list")
         flash(f"{current_user.name} logged in.", "success")
         return redirect(next_page)
     elif request.method == "GET" and current_user.is_authenticated:
@@ -107,14 +107,15 @@ def edit(id):
 @bp.route("/users/<uuid:id>/delete", methods=["GET", "POST"])
 @fresh_login_required
 @limiter.limit("2 per second", key_func=lambda: current_user.id)
-@csrf.exempt
 def delete(id):
     """Delete a User with a specific ID."""
     if str(id) != current_user.id:
         raise Forbidden()
 
+    form = UserDeleteForm()
+
     if request.method == "GET":
-        return render_template("delete_user.html", title="Delete account", user=current_user)
+        return render_template("delete_user.html", title="Delete account", form=form, user=current_user)
     elif request.method == "POST":
         current_app.logger.info(f"User {current_user.id} deleted account")
         db.session.delete(current_user)
