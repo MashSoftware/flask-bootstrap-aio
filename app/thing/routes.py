@@ -21,15 +21,15 @@ def list():
     form = ThingFilterForm()
 
     sort_by = request.args.get("sort", type=str)
-    name_query = request.args.get("name", type=str)
+    search = request.args.get("query", type=str)
     colour = request.args.get("colour", type=str)
     display = request.args.get("display", type=str)
 
     query = Thing.query
 
-    if name_query:
-        query = query.filter(Thing.name.ilike(f"%{name_query}%"))
-        form.name.data = name_query
+    if search:
+        query = query.filter(Thing.name.ilike(f"%{search}%"))
+        form.query.data = search
     if colour:
         query = query.filter(Thing.colour == colour)
         form.colour.data = colour

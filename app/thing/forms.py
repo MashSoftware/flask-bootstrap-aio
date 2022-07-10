@@ -29,12 +29,7 @@ class ThingForm(FlaskForm):
 
 
 class ThingFilterForm(FlaskForm):
-    display = RadioField(
-        "Display",
-        validators=[Optional()],
-        choices=[("all", "All Things"), ("mine", "My Things")],
-        default="all",
-    )
+    query = StringField("Search", validators=[Optional()])
     sort = SelectField(
         "Sort by",
         validators=[InputRequired()],
@@ -47,7 +42,12 @@ class ThingFilterForm(FlaskForm):
         ],
         default="name",
     )
-    name = StringField("Name", validators=[Optional()])
+    display = RadioField(
+        "Display",
+        validators=[Optional()],
+        choices=[("all", "All Things"), ("mine", "My Things")],
+        default="all",
+    )
     colour = RadioField(
         "Colour",
         validators=[Optional()],

@@ -12,10 +12,17 @@
         <div class="d-grid gap-2 mb-3">
             <a class="btn btn-primary btn-lg" href="{{ url_for('thing.create') }}"><i class="bi bi-plus-lg"></i> New thing</a>
         </div>
-        <div class="card mb-3">
-            <div class="card-header">Filters</div>            
+        <div class="card mb-3">           
             <div class="card-body">
                 <form action="" method="get" novalidate>
+                    <div class="mb-3">
+                        {{ form.query.label(class="form-label") }}
+                        {{ form.query(class="form-control", type="text") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.sort.label(class="form-label") }}
+                        {{ form.sort(class="form-select") }}
+                    </div>
                     <div class="mb-3">
                         {{ form.display.label(class="form-label") }}
                         {% for subfield in form.display %}
@@ -24,14 +31,6 @@
                                 {{ subfield.label(class="form-check-label") }}
                             </div>
                         {% endfor %}
-                    </div>
-                    <div class="mb-3">
-                        {{ form.sort.label(class="form-label") }}
-                        {{ form.sort(class="form-select mb-2") }}
-                    </div>
-                    <div class="mb-3">
-                        {{ form.name.label(class="form-label") }}
-                        {{ form.name(class="form-control mb-2", type="text") }}
                     </div>
                     <div class="mb-3">
                         {{ form.colour.label(class="form-label") }}
@@ -43,7 +42,7 @@
                         {% endfor %}
                     </div>
                     <div class="d-grid gap-2">
-                        <button class="btn btn-secondary" type="submit"><i class="bi bi-filter"></i> Apply filters</button>
+                        <button class="btn btn-secondary" type="submit"><i class="bi bi-filter"></i> Apply</button>
                     </div>
                 </form>
             </div>
