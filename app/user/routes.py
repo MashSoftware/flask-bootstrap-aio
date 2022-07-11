@@ -31,7 +31,7 @@ def signup():
         login_user(user)
         current_app.logger.info(f"User {current_user.id} logged in")
         flash(f"Welcome {current_user.name}", "success")
-        return redirect(url_for("main.index"))
+        return redirect(url_for("thing.list"))
     return render_template("sign_up_form.html", title="Sign up", form=form)
 
 
