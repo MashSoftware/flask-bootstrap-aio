@@ -99,7 +99,7 @@ pytz==2022.1
     # via -r requirements.in
 redis==4.3.4
     # via -r requirements.in
-rich==12.4.4
+rich==12.5.1
     # via flask-limiter
 sqlalchemy==1.4.39
     # via
