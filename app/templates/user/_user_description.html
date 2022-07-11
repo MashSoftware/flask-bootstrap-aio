@@ -1,7 +1,8 @@
 <dl class="row">
+    {% if current_user.email_address == user.email_address %}
     <dt class="col-sm-3">Email address</dt>
     <dd class="col-sm-9">{{ user.email_address }}</dd>
-
+    {% endif %}
     <dt class="col-sm-3">Timezone</dt>
     <dd class="col-sm-9">{{ user.timezone }}</dd>
 
