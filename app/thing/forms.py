@@ -34,13 +34,12 @@ class ThingFilterForm(FlaskForm):
         "Sort by",
         validators=[InputRequired()],
         choices=[
+            ("created_at", "Most recent"),
             ("name", "Name"),
             ("colour", "Colour"),
             ("user_id", "Owner"),
-            ("created_at", "Created"),
-            ("updated_at", "Updated"),
         ],
-        default="name",
+        default="created_at",
     )
     display = RadioField(
         "Display",

@@ -36,11 +36,11 @@ def list():
     if display and display == "mine":
         query = query.filter(Thing.user_id == current_user.id)
         form.display.data = display
-    if sort_by and sort_by != "name":
-        query = query.order_by(getattr(Thing, sort_by).asc(), Thing.name.asc())
+    if sort_by and sort_by != "created_at":
+        query = query.order_by(getattr(Thing, sort_by).asc(), Thing.created_at.desc())
         form.sort.data = sort_by
     else:
-        query = query.order_by(Thing.name.asc())
+        query = query.order_by(Thing.created_at.desc())
 
     things = query.all()
 
