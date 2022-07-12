@@ -20,33 +20,34 @@ def list():
     """Get a list of Things."""
     form = ThingFilterForm()
 
-    sort_by = request.args.get("sort", type=str)
-    search = request.args.get("query", type=str)
     colour = request.args.get("colour", type=str)
-    display = request.args.get("display", type=str)
+    page = request.args.get("page", type=int)
+    per_page = request.args.get("per_page", type=int)
+    search = request.args.get("query", type=str)
+    sort_by = request.args.get("sort", type=str)
 
     query = Thing.query
 
     if search:
         query = query.filter(Thing.name.ilike(f"%{search}%"))
         form.query.data = search
+
     if colour:
         query = query.filter(Thing.colour == colour)
         form.colour.data = colour
-    if display and display == "mine":
-        query = query.filter(Thing.user_id == current_user.id)
-        form.display.data = display
+
     if sort_by and sort_by != "created_at":
         query = query.order_by(getattr(Thing, sort_by).asc(), Thing.created_at.desc())
         form.sort.data = sort_by
     else:
         query = query.order_by(Thing.created_at.desc())
 
-    things = query.all()
+    if per_page:
+        form.per_page.data = str(per_page)
 
-    total = Thing.query.count()
+    things = query.paginate(page=page, per_page=per_page, max_per_page=40)
 
-    return render_template("list_things.html", title="Things", things=things, form=form, total=total)
+    return render_template("list_things.html", title="Things", things=things, form=form)
 
 
 @bp.route("/new", methods=["GET", "POST"])
@@ -146,20 +147,22 @@ def delete(id):
 @limiter.limit("2 per second", key_func=lambda: current_user.id)
 def download():
     """Download a list of Things."""
-    sort_by = request.args.get("sort", type=str)
-    name_query = request.args.get("name", type=str)
     colour = request.args.get("colour", type=str)
+    search = request.args.get("query", type=str)
+    sort_by = request.args.get("sort", type=str)
 
     query = Thing.query
 
-    if name_query:
-        query = query.filter(Thing.name.ilike(f"%{name_query}%"))
+    if search:
+        query = query.filter(Thing.name.ilike(f"%{search}%"))
+
     if colour:
         query = query.filter(Thing.colour == colour)
-    if sort_by and sort_by != "name":
-        query = query.order_by(getattr(Thing, sort_by).asc(), Thing.name.asc())
+
+    if sort_by and sort_by != "created_at":
+        query = query.order_by(getattr(Thing, sort_by).asc(), Thing.created_at.desc())
     else:
-        query = query.order_by(Thing.name.asc())
+        query = query.order_by(Thing.created_at.desc())
 
     things = query.all()
 

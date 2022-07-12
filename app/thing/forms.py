@@ -41,11 +41,11 @@ class ThingFilterForm(FlaskForm):
         ],
         default="created_at",
     )
-    display = RadioField(
-        "Display",
-        validators=[Optional()],
-        choices=[("all", "All Things"), ("mine", "My Things")],
-        default="all",
+    per_page = SelectField(
+        "Items per page",
+        validators=[InputRequired()],
+        choices=[(10, "10"), (20, "20"), (40, "40")],
+        default=20,
     )
     colour = RadioField(
         "Colour",
