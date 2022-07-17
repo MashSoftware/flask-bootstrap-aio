@@ -7,7 +7,7 @@
         <hr>
         {% include '_user_description.html' %}
         {% if current_user.id == user.id %}
-        <div class="d-grid gap-2 d-sm-block mb-3">
+        <div class="d-grid gap-3 d-sm-block mb-3">
             <a class="btn btn-primary" href="{{ url_for('user.edit', id=current_user.id) }}"><i class="bi bi-pencil-square"></i> Edit</a>
             <a class="btn btn-danger" href="{{ url_for('user.delete', id=current_user.id) }}"><i class="bi bi-trash"></i> Delete</a>
         </div>
