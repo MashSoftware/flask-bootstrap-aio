@@ -1,5 +1,7 @@
 # Flask Bootstrap All-in-One Template
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/N4N33KKEF)
+
 ## Prerequisites
 
 ### Required
